@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permission-Aware Operations Agent - Session Summary Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+      --emerald-600: #059669;
+      --amber-600: #d97706;
+      --rose-600: #e11d48;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--slate-800);
+      background: var(--slate-50);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 48px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+
+    .badge-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: var(--slate-100);
+      color: var(--slate-700);
+    }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #e0f2fe; color: #0369a1; }
+
+    header {
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--slate-600);
+      margin-bottom: 16px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      font-size: 13px;
+      background: var(--slate-50);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .meta-item strong { color: var(--slate-900); }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin: 32px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin: 20px 0 8px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--slate-100);
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: var(--slate-900);
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--slate-100);
+      color: var(--slate-800);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) { background: #fbfcfe; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      background: #ffffff;
+    }
+
+    .card-title {
+      font-weight: 700;
+      color: var(--primary-dark);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .print-button {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      margin-top: 16px;
+      text-decoration: none;
+    }
+    .print-button:hover { background: var(--primary-dark); }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-button { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge-bar">
+      <span class="badge badge-success">✓ 26 / 26 Tests Passing</span>
+      <span class="badge badge-blue">FastAPI + React 18</span>
+      <span class="badge">11 PostgreSQL Tables</span>
+      <span class="badge">1,240 Inventory Items</span>
+      <span class="badge">550 Bills</span>
+    </div>
+
+    <header>
+      <h1>Permission-Aware Operations Agent</h1>
+      <div class="subtitle">Complete Engineering Session Summary & Deliverables</div>
+      <div class="meta-grid">
+        <div class="meta-item"><strong>Date:</strong> November 10, 2026</div>
+        <div class="meta-item"><strong>GitHub:</strong> <a href="https://github.com/kjeevankumar/Permission-Aware-Operations-Agent.git" target="_blank">kjeevankumar/Permission-Aware-Operations-Agent</a></div>
+        <div class="meta-item"><strong>Branch:</strong> <code>main</code> (103 clean files)</div>
+        <div class="meta-item"><strong>Author:</strong> K Jeevan Kumar</div>
+      </div>
+      <button class="print-button" onclick="window.print()">🖨️ Save as PDF / Print</button>
+    </header>
+
+    <h2>🚀 Executive Summary</h2>
+    <p>
+      In this comprehensive engineering session, the complete foundation, business logic, security layers, and modern user interface of the <strong>Permission-Aware Operations Agent</strong> were developed, rigorously tested, verified on localhost, and published to GitHub.
+    </p>
+
+    <h2>🛡️ Key Security & Architectural Guarantees</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">1. Hospital Tenant Isolation</div>
+        <p style="font-size: 13px;">Every business table includes an indexed <code>hospital_id</code>. Tenant context is derived strictly from verified JWT tokens. Client spoofing via query params or headers is completely blocked.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">2. Dynamic RBAC & Limits</div>
+        <p style="font-size: 13px;">Permissions enforce JSON operational constraints: Pharmacist (<code>max_rows: 500</code>), Billing Manager (<code>max_discount_pct: 10%</code>), Front Desk (<code>scope: own_records</code>), Admin (full limits).</p>
+      </div>
+      <div class="card">
+        <div class="card-title">3. Two-Phase Protocol</div>
+        <p style="font-size: 13px;">Mutating actions calculate dry-run before/after diffs and stage operations with 15-min TTL. Atomic execution requires same-tenant approval. Operations impacting >50 records trigger safeguard modals.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">4. Zero Financial Deletions</div>
+        <p style="font-size: 13px;">In compliance with healthcare billing standards, <code>bills.delete</code> does not exist. Medical bills only permit status updates or authorized discounts.</p>
+      </div>
+    </div>
+
+    <h2>💻 Tech Stack & Deliverables</h2>
+    <ul>
+      <li><strong>Backend:</strong> Python 3.12, FastAPI, SQLAlchemy 2.0, Pydantic v2, Alembic, Bcrypt (12 rounds), JWT Bearer Auth.</li>
+      <li><strong>Database:</strong> PostgreSQL 16 / SQLite with 11 relational tables and initial migration.</li>
+      <li><strong>Seed Dataset:</strong> 2 Hospitals, 14 Users, 1,240 Inventory items (low-stock alerts, 30-day expiries, prompt-injection test record), 550 Bills.</li>
+      <li><strong>Frontend:</strong> React 18, Vite, Tailwind CSS, Lucide Icons, Axios with JWT interceptors.</li>
+      <li><strong>AI Assistant Chat:</strong> 4 structured response schemas (Answer, Clarification for ambiguous names like 'Ravi', Refusal, and Staged Preview diffs).</li>
+      <li><strong>Testing:</strong> 26 passing tests covering database integrity, authentication, and cross-tenant isolation barriers.</li>
+    </ul>
+
+    <h2>🔑 Demo Credentials Reference</h2>
+    <p>Default demonstration password for all users: <code>HospitalDemo2026!</code></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Hospital</th>
+          <th>Username</th>
+          <th>Role(s)</th>
+          <th>Capabilities & Test Intent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>admin.metro</code></td>
+          <td>Admin</td>
+          <td>Full admin access, up to 100% discount, user overrides</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>billing.metro</code></td>
+          <td>Billing Manager</td>
+          <td>Invoices & financial adjustments (capped at 10% discount)</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>pharma.metro</code></td>
+          <td>Pharmacist</td>
+          <td>Drug inventory updates (capped at 500 records)</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>frontdesk.metro</code></td>
+          <td>Front Desk</td>
+          <td>Patient bill creation, restricted to own records</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>doctor.metro</code></td>
+          <td>Doctor</td>
+          <td>Clinical lookup for inventory and bills</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>ravi.sharma</code></td>
+          <td>Doctor, Admin</td>
+          <td>Dual-role user; tests "Ravi" ambiguity resolution</td>
+        </tr>
+        <tr>
+          <td>Metro Health</td>
+          <td><code>ravi.kumar</code></td>
+          <td>Pharmacist</td>
+          <td>Pharmacist user; tests "Ravi" ambiguity resolution</td>
+        </tr>
+        <tr>
+          <td>St. Jude Memorial</td>
+          <td><code>admin.jude</code></td>
+          <td>Admin</td>
+          <td>Isolated St. Jude hospital administration</td>
+        </tr>
+        <tr>
+          <td>St. Jude Memorial</td>
+          <td><code>billing.jude</code></td>
+          <td>Billing Manager</td>
+          <td>St. Jude invoice adjustments (10% max discount)</td>
+        </tr>
+        <tr>
+          <td>St. Jude Memorial</td>
+          <td><code>ravi.patel</code></td>
+          <td>Billing Mgr, Front Desk</td>
+          <td>Cross-hospital user; tests tenant isolation for "Ravi"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>⚡ Quick Local Run Commands</h2>
+    <pre><code># Start FastAPI Backend
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+# Access Swagger UI: http://localhost:8000/docs
+
+# Start React Frontend
+cd frontend
+npm run dev
+# Access Web App: http://localhost:5173
+
+# Execute Pytest Suite
+pytest -v</code></pre>
+
+    <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
+      HextgenAI Technical Assessment &bull; Developed by K Jeevan Kumar &bull; November 2026
+    </div>
+  </div>
+</body>
+</html>
